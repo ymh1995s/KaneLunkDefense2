@@ -23,12 +23,10 @@ public class BaseWeapon : MonoBehaviour
     {
         bulletPrefab = Resources.Load<GameObject>("tempBullet");
 
-        // 부모 객체의 Transform을 가져옵니다.
         Transform parentTransform = transform.parent;
 
         if (parentTransform != null)
         {
-            // 부모 객체에서 플레이어의 Transform을 찾아 할당합니다.
             playerTransform = parentTransform;
         }
         else

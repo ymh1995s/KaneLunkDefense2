@@ -17,11 +17,11 @@ public class BaseMonster : MonoBehaviour
     float DetectRange = 5; // 목표를 탐지하기 위한 범위
 
     LayerMask[] targetLayer;    // 적 레이어
-    bool firstTargeting = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        target = GameObject.Find("tempCC");
         rigid = GetComponent<Rigidbody2D>();
         targetLayer = new LayerMask[3];
         targetLayer[0] = LayerMask.GetMask("Player");
@@ -42,30 +42,19 @@ public class BaseMonster : MonoBehaviour
     void ChooseTarget()
     {
         // 플레이어 > 타워 > 기지 순 어그로
-
-        //타겟이 null이거나 피격(setactive false)일 때 타겟팅을 다시 함
-        if (target == null || (target.activeSelf==false)) firstTargeting = false;
-
-        //타게팅은 bool 변수를 이용해 1회만 한다.
-        if (firstTargeting == false)
+        Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, DetectRange, targetLayer[0]);
+        if (targets.Length != 0)
         {
-            Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, DetectRange, targetLayer[0]);
-            if (targets.Length != 0)
-            {
-                target = targets[0].gameObject;
-                firstTargeting = true;
-                return;
-            }
+            target = targets[0].gameObject;
+            return;
+        }
 
-            targets = Physics2D.OverlapCircleAll(transform.position, DetectRange, targetLayer[1]);
-            if (targets.Length != 0)
-            {
-                target = targets[0].gameObject;
-                firstTargeting = true;
-                return;
-            }
-        }            
-
+        targets = Physics2D.OverlapCircleAll(transform.position, DetectRange, targetLayer[1]);
+        if (targets.Length != 0)
+        {
+            target = targets[0].gameObject;
+            return;
+        }
         target = GameObject.Find("tempCC");
     }
 

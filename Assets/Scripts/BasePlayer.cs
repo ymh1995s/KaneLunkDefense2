@@ -11,19 +11,19 @@ public class BasePlayer : MonoBehaviour
     float p_speed = 5f;
 
     //무기 관리
-    public GameObject[] weapon1;
-    public GameObject weaponPrefab; // Inspector에서 할당할 무기 프리팹
+    GameObject[] weapon1;
+    GameObject weaponPrefab; // Inspector에서 할당할 무기 프리팹
     int maxWeaponCount = 8;
 
     //아이템 자석 효과
-    float attractionRange = 1f; // 아이템 자석 효과 범위 (플레이어 기준)
-    float attractionSpeed = 1f; // 아이템 자석효과 속도
-    LayerMask itemLayer; // 아이템 레이어
+    float attractionRange = 0.5f;   // 아이템 자석 효과 범위 (플레이어 기준)
+    float attractionSpeed = 2f;     // 아이템 끌려들어가는 속도
+    LayerMask itemLayer;            // 아이템 레이어
 
     //선언과 동시에 초기화
-    int w1_level = 1;
-    int maxExp=1;
-    int curExp=0;
+    int w1_level = 0;
+    int maxExp = 1;
+    int curExp = 0;
 
     void Start()
     {
@@ -43,30 +43,8 @@ public class BasePlayer : MonoBehaviour
         CollectItem();
     }
 
-
-    void GetWeaponInfo()
-    {
-        // Weapon1 정보 가져오기
-        weapon1 = new GameObject[maxWeaponCount];
-        Transform WeaponMaster1 = transform.GetChild(0); //무기 오브젝트를 가지고 있는 부모
-
-        for (int i = 0; i < maxWeaponCount; i++)
-        {
-            Transform weapon = WeaponMaster1.GetChild(i);
-            weapon1[i] = weapon.gameObject;
-        }
-
-        // 가져온 모든 자식 오브젝트 출력
-        // TODO : 삭제
-        foreach (GameObject childObject in weapon1)
-        {
-            childObject.SetActive(false);
-            Debug.Log("Found child: " + childObject.name);
-        }
-    }
-
     void CollectItem()
-    {   
+    {
         // 플레이어 주변의 아이템 탐지
         Collider2D[] items = Physics2D.OverlapCircleAll(transform.position, attractionRange, itemLayer);
         foreach (Collider2D itemCollider in items)
@@ -110,7 +88,7 @@ public class BasePlayer : MonoBehaviour
         curExp = System.Math.Max(0, maxExp - curExp);
         //maxExp += 5; //본게임 때 주석 해제
         Upgrade();
-        
+
     }
 
     void AddWeapon()
@@ -120,7 +98,9 @@ public class BasePlayer : MonoBehaviour
             // 무기 프리팹을 플레이어의 자식으로 추가
             GameObject weapon = Instantiate(weaponPrefab, transform.position, Quaternion.identity);
             weapon.transform.parent = transform; // 현재 플레이어를 부모로 설정
-            WeaponSort(w1_level++);
+            weapon1[w1_level] = weapon;
+            WeaponSort(w1_level);
+            w1_level++;
         }
         else
         {
@@ -130,35 +110,19 @@ public class BasePlayer : MonoBehaviour
 
     void Upgrade()
     {
-        int index = Random.Range(0, 100);
-        //print(index);
-        string temp;
         AddWeapon();
-        //weapon1[w1_level++].SetActive(true);
-        //WeaponSort(w1_level);
-
-        //if (index < 10) print("1");
-        //else if (index < 20) print("2");
-        //else if (index < 30) print("3");
-        //else if (index < 40) print("4");
-        //else if (index < 50) print("5");
-        //else if (index < 60) print("6");
-        //else if (index < 70) print("7");
-        //else if (index < 80) print("8");
-        //else if (index < 90) print("9");
-        //else print("10");
     }
 
     //아이템 겹쳐있는거 먹으면 궤도 삐꾸되서 코루틴으로 빼야함
     void WeaponSort(int weaponCount)
     {
-        //오 근데 이방법 쓰면 미리 프리팹을 플레이어에 달아 놓은 필요가 없잖아?
+        weaponCount += 1; //weaponArr이 0부터이므로 보정
         int rad = 360 / weaponCount;
 
-        for(int i = 0; i<weaponCount;i++) 
+        for (int i = 0; i < weaponCount; i++)
         {
             BaseWeapon bweapon = weapon1[i].GetComponent<BaseWeapon>();
-            bweapon.currentAngle = rad*i;
+            bweapon.currentAngle = rad * i;
         }
     }
 

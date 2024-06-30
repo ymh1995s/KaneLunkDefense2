@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5510912865405891134}
   - component: {fileID: 2591945119128264451}
   - component: {fileID: 9151775184402291414}
+  - component: {fileID: 6776233850116549724}
   m_Layer: 10
   m_Name: tempTower
   m_TagString: Untagged
@@ -105,9 +106,6 @@ MonoBehaviour:
   power: 0
   attackRange: 0
   attackCoolTime: 0
-  radius: 5
-  segments: 100
-  gizmoColor: {r: 1, g: 0, b: 0, a: 1}
   detectionRadius: 5
   enemyLayer:
     serializedVersion: 2
@@ -222,3 +220,49 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 1
   m_ApplyActiveColorSpace: 1
+--- !u!61 &6776233850116549724
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5387379180856080484}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 4.28, y: 2.91}
+    newSize: {x: 4.28, y: 2.91}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 4.28, y: 2.91}
+  m_EdgeRadius: 0
