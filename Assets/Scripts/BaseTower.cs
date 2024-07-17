@@ -1,22 +1,24 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BaseGuard : MonoBehaviour
+public class BaseTower : MonoBehaviour
 {
-    [SerializeField] private int hp;
+    static public int maxHP;
+    [SerializeField] private int currentHp;
     [SerializeField] private int power;
     [SerializeField] private int attackRange;
     [SerializeField] private int attackCoolTime;
 
-    public float detectionRadius = 5f;  // 타워의 탐지 반경
 
     public LayerMask enemyLayer;    // 적 레이어
     Collider2D enemyCollider;       // 적 콜라이더
     Transform target;               // 타게팅된 적
 
-    public GameObject bulletPrefab; // 발사할 총알 프리팹
-    public float fireRate = 1f; // 발사 간격을 초 단위로 설정 (5초에 한 번 발사)
-    public float bulletSpeed = 5f;  // 총알 속도
+    private GameObject bulletPrefab; // 발사할 총알 프리팹
+    private float bulletSpeed = 5f;  // 총알 속도
+    private float fireRate = 1f; // 발사 간격을 초 단위로 설정 (5초에 한 번 발사)
+    public static float fireRateMmul = 1.0f;
+    public static float detectionRadius = 5f;  // 타워의 탐지 반경
     private float fireCountdown = 0f;// 발사 간격을 체크하기 위한 카운트다운 변수
 
     void Start()
@@ -98,9 +100,13 @@ public class BaseGuard : MonoBehaviour
                 Rigidbody2D rb = bulletGO.GetComponent<Rigidbody2D>();
                 rb.velocity = transform.right * bulletSpeed;
 
-                fireCountdown = fireRate;
+                fireCountdown = (fireRate* fireRateMmul);
             }
         }
+    }
+
+    static public void HPRecovery()
+    {
     }
 
     // Gizmos를 사용하여 탐지 반경을 시각적으로 표시
