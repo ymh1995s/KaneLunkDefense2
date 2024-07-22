@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class LV1Weapon : BaseWeapon
 {
-    float fireRate = 2f; // 발사 간격을 초 단위로 설정 (X초에 한 번 발사)
+    //float fireRate = 2f; // 발사 간격을 초 단위로 설정 (X초에 한 번 발사)
+    float fireRate = 1f; // 발사 간격을 초 단위로 설정 (X초에 한 번 발사)
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
         base.Start(); // Call BaseWeapon's Start method
+        bulletPrefab = Resources.Load<GameObject>(prefabNames[0]);
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         Orbit();
         DetectEnemy();

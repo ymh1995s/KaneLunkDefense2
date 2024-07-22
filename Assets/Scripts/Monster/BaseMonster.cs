@@ -9,17 +9,19 @@ public class BaseMonster : MonoBehaviour
 {
     GameObject target; // 목표 지점
     private Rigidbody2D rigid;
-    [SerializeField] private int hp = 1;
-    [SerializeField] private float speed = 0.2f;
+    [SerializeField] protected int hp = 9999;
+    protected float speed =10f;
     [SerializeField] private int searchRange = 1;
 
+    public int attackPower = 1;
+    private float attackInterval = 1.0f;
+    private float lastAttackTime = 0.0f;
+
     private bool isDying = false;   // 몬스터가 생존 여부
-    float DetectRange = 5; // 목표를 탐지하기 위한 범위
+    private float DetectRange = 5; // 목표를 탐지하기 위한 범위
+    private LayerMask[] targetLayer;    // 적 레이어
 
-    LayerMask[] targetLayer;    // 적 레이어
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected virtual void Start()
     {
         target = GameObject.Find("tempCC");
         rigid = GetComponent<Rigidbody2D>();
@@ -68,19 +70,26 @@ public class BaseMonster : MonoBehaviour
         }
     }
 
-    void Hit()
+
+    void TakeDamage(int damage)
     {
-        Death();
+        hp -= damage;
+        //healthBar.SetHealth(currentHealth); //TODO?
+
+        if (hp <= 0)
+        {
+            Death();
+        }
     }
 
     void Death()
     {        
-        SpawnItem();
+        DropItem();
         Destroy(gameObject);
         isDying = true;
     }
 
-    void SpawnItem()
+    void DropItem()
     {
         // 중복 수혜 방지
         if (isDying == true) return;
@@ -105,13 +114,66 @@ public class BaseMonster : MonoBehaviour
             print(" 잘못된 코인");
         }
     }
-   
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Bullet"))
         {
-            Destroy(collision.gameObject); // 총알 삭제
-            Hit(); //피격           
+            BaseProjectile projectile = collision.GetComponent<BaseProjectile>();
+            if (projectile != null)
+            {
+                TakeDamage(projectile.attackPower);
+                projectile.Destroy();
+            }   
+        }
+
+        if (collision.CompareTag("Player"))
+        {
+            StartCoroutine(AttackPlayer(collision.GetComponent<BasePlayer>()));
+        }
+
+        if (collision.CompareTag("Tower"))
+        {
+            StartCoroutine(AttackTower(collision.GetComponent<BaseTower>()));
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            StopCoroutine(AttackPlayer(collision.GetComponent<BasePlayer>()));
+        }
+
+        if (collision.CompareTag("Tower"))
+        {
+            StopCoroutine(AttackTower(collision.GetComponent<BaseTower>()));
+        }
+    }
+
+    IEnumerator AttackPlayer(BasePlayer player)
+    {
+        while (player != null)
+        {
+            if (Time.time - lastAttackTime >= attackInterval)
+            {
+                player.TakeDamage(attackPower);
+                lastAttackTime = Time.time;
+            }
+            yield return null;
+        }
+    }
+
+    IEnumerator AttackTower(BaseTower tower)
+    {
+        while (tower != null)
+        {
+            if (Time.time - lastAttackTime >= attackInterval)
+            {
+                tower.TakeDamage(attackPower);
+                lastAttackTime = Time.time;
+            }
+            yield return null;
         }
     }
 

@@ -32,8 +32,8 @@ public static class Gatcha
         AddNumbersToArray(2, 10, levelUpGatcha); //플레이어 관련
 
         //합이 1000이 되도록
-        AddNumbersToArray(0, 70, weaponGatcha); // 무기 개수 MAX7 (기본 1개이므로)
-        AddNumbersToArray(1, 240, weaponGatcha); // 무기 등급 3*8 = 24
+        AddNumbersToArray(0, 170, weaponGatcha); // 무기 개수 MAX7 (기본 1개이므로)
+        AddNumbersToArray(1, 140, weaponGatcha); // 무기 등급 3*8 = 24
         AddNumbersToArray(2, 290, weaponGatcha); // 무기 공속 
         AddNumbersToArray(3, 100, weaponGatcha); // 무기 레인지
         AddNumbersToArray(4, 300, weaponGatcha); // 무기 공격력
@@ -72,7 +72,6 @@ public static class Gatcha
             array[randomIndex] = temp;
         }
     }
-
 
     static void ShuffleAll()
     {        

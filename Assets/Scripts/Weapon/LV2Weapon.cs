@@ -8,10 +8,12 @@ public class LV2Weapon : BaseWeapon
     protected override void Start()
     {
         base.Start(); // Call BaseWeapon's Start method
+        bulletPrefab = Resources.Load<GameObject>(prefabNames[1]);
+
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         Orbit();
         DetectEnemy();

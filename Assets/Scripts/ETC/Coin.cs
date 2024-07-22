@@ -9,11 +9,11 @@ public class Coin : MonoBehaviour
     private float landDuration = 0.125f; // 착지하는 시간
     private Vector3 originalPosition; // 초기 위치
     private float startTime; // 시작 시간
-    private bool isFloating = false; // 떠오르는 중인지 여부
 
     void Start()
     {
         DropEffect();
+        Destroy(gameObject, 15); //X초후 삭제
     }
 
     void DropEffect()
@@ -28,7 +28,6 @@ public class Coin : MonoBehaviour
     IEnumerator FloatAndLand()
     {
         // 떠오르는 애니메이션
-        isFloating = true;
         while (Time.time - startTime < floatDuration)
         {
             float newY = originalPosition.y + floatHeight * Mathf.Sin((Time.time - startTime) * Mathf.PI / floatDuration);

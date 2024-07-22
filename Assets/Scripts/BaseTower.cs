@@ -3,12 +3,15 @@ using UnityEngine.UIElements;
 
 public class BaseTower : MonoBehaviour
 {
-    static public int maxHP;
+    static public int maxHP = 10;
     [SerializeField] private int currentHp;
-    [SerializeField] private int power;
+    public static int attackPower;
     [SerializeField] private int attackRange;
     [SerializeField] private int attackCoolTime;
 
+    //체력바 관련
+    private RectTransform healthBarForeground;
+    private Vector3 originalScale;
 
     public LayerMask enemyLayer;    // 적 레이어
     Collider2D enemyCollider;       // 적 콜라이더
@@ -21,9 +24,16 @@ public class BaseTower : MonoBehaviour
     public static float detectionRadius = 5f;  // 타워의 탐지 반경
     private float fireCountdown = 0f;// 발사 간격을 체크하기 위한 카운트다운 변수
 
+    protected string[] prefabNames = { "Projectile/Basic", "Projectile/ADVBasic", "Projectile/ICE", "Projectile/FIRE", "Projectile/Special2" }; // 사용할 프리팹 이름들
+
     void Start()
     {
-
+        bulletPrefab = Resources.Load<GameObject>(prefabNames[0]);
+        currentHp = maxHP;
+        // 하위 하이러라키에서 healthBarForeground를 할당
+        healthBarForeground = transform.Find("HPBar/RED").GetComponent<RectTransform>();
+        originalScale = healthBarForeground.localScale;
+        UpdateHealthBar();
     }
 
     // Update is called once per frame
@@ -34,15 +44,32 @@ public class BaseTower : MonoBehaviour
         Fire();
     }
 
-    void Hit()
+    public void TakeDamage(int damage)
     {
+        currentHp -= damage;
+        currentHp = Mathf.Clamp(currentHp, 0, maxHP);
+        UpdateHealthBar();
 
+        if (currentHp <= 0)
+        {
+            Death();
+        }
     }
 
     void Death()
     {
 
     }
+
+    void UpdateHealthBar()
+    {
+        // 체력 비율 계산
+        float healthPercent = (float)currentHp / maxHP;
+
+        // 체력바의 스케일 조정
+        healthBarForeground.localScale = new Vector3(originalScale.x * healthPercent, originalScale.y, originalScale.z);
+    }
+
 
     void DetectEnemy()
     {

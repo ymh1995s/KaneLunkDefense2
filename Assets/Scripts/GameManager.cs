@@ -7,4 +7,14 @@ public class GameManager : MonoBehaviour
     {
         Gatcha.GameStart();
     }
+
+    public void DebugBtnTimePlus()
+    {
+        Time.timeScale += 0.5f;
+    }
+
+    public void DebugBtnTimeMinus()
+    {
+        Time.timeScale -= 0.5f;
+    }
 }
