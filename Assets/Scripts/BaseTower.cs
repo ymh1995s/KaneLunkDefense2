@@ -1,22 +1,14 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BaseTower : MonoBehaviour
+public class BaseTower : MonoBehaviour, IDamageable
 {
+    //스텟 영역
     static public int maxHP = 10;
     [SerializeField] private int currentHp;
     public static int attackPower;
     [SerializeField] private int attackRange;
     [SerializeField] private int attackCoolTime;
-
-    //체력바 관련
-    private RectTransform healthBarForeground;
-    private Vector3 originalScale;
-
-    public LayerMask enemyLayer;    // 적 레이어
-    Collider2D enemyCollider;       // 적 콜라이더
-    Transform target;               // 타게팅된 적
-
     private GameObject bulletPrefab; // 발사할 총알 프리팹
     private float bulletSpeed = 5f;  // 총알 속도
     private float fireRate = 1f; // 발사 간격을 초 단위로 설정 (5초에 한 번 발사)
@@ -24,13 +16,22 @@ public class BaseTower : MonoBehaviour
     public static float detectionRadius = 5f;  // 타워의 탐지 반경
     private float fireCountdown = 0f;// 발사 간격을 체크하기 위한 카운트다운 변수
 
+    //체력바 영역
+    private RectTransform healthBarForeground;
+    private Vector3 originalScale;
+
+    //탐지 영역
+    public LayerMask enemyLayer;    // 적 레이어
+    Collider2D enemyCollider;       // 적 콜라이더
+    Transform target;               // 타게팅된 적
+
+    // 참조용 스트링 Arr
     protected string[] prefabNames = { "Projectile/Basic", "Projectile/ADVBasic", "Projectile/ICE", "Projectile/FIRE", "Projectile/Special2" }; // 사용할 프리팹 이름들
 
     void Start()
     {
         bulletPrefab = Resources.Load<GameObject>(prefabNames[0]);
         currentHp = maxHP;
-        // 하위 하이러라키에서 healthBarForeground를 할당
         healthBarForeground = transform.Find("HPBar/RED").GetComponent<RectTransform>();
         originalScale = healthBarForeground.localScale;
         UpdateHealthBar();
@@ -58,7 +59,8 @@ public class BaseTower : MonoBehaviour
 
     void Death()
     {
-
+        //TODO : 반투명 처리
+        gameObject.SetActive(false);
     }
 
     void UpdateHealthBar()
@@ -85,6 +87,12 @@ public class BaseTower : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(towerPosition, detectionRadius, enemyLayer);
         foreach (Collider2D collider in colliders)
         {
+            Renderer enemyRenderer = collider.GetComponent<Renderer>();
+            if (enemyRenderer == null || !enemyRenderer.enabled)
+            {
+                continue; // 렌더러가 없거나 비활성화된 적을 무시합니다.
+            }
+
             // 타워와 적 사이의 거리 계산
             float distanceToEnemy = Vector2.Distance(towerPosition, collider.transform.position);
 
@@ -116,7 +124,6 @@ public class BaseTower : MonoBehaviour
         // 발사 간격 체크
         fireCountdown -= Time.deltaTime;
 
-        // 가장 가까운 적이 있다면 처리
         if (target != null)
         {
            
@@ -132,11 +139,7 @@ public class BaseTower : MonoBehaviour
         }
     }
 
-    static public void HPRecovery()
-    {
-    }
-
-    // Gizmos를 사용하여 탐지 반경을 시각적으로 표시
+    // 탐지반경 기즈모
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

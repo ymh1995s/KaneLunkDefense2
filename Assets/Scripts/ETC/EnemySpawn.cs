@@ -35,8 +35,6 @@ public class EnemySpawn : MonoBehaviour
 
             // 현재 프리팹 인덱스를 다음으로 변경
             currentPrefabIndex = (currentPrefabIndex + 1) % prefabNames.Length;
-            print("current Prefab Index");
-            print(currentPrefabIndex);
             // 새로운 프리팹 로드
             objectToSpawn = Resources.Load<GameObject>(prefabNames[currentPrefabIndex]);
 

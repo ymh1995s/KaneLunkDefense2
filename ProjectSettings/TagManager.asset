@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Bullet
   - Item
+  - LV2Weapon
+  - LV3Weapon
+  - LV1Weapon
+  - Tower
   layers:
   - Default
   - TransparentFX

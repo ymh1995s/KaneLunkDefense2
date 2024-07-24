@@ -14,22 +14,34 @@ using static UnityEditor.Recorder.OutputPath;
 
 public class BaseProjectile : MonoBehaviour
 {
-    public int attackPower = 1;
-    private float speed = 5f;  // 투사체 속도
-    public float hitOffset = 0f;  // 충돌 시 오프셋
-    public bool UseFirePointRotation;  // 충돌 시 회전 적용 여부
-    public Vector3 rotationOffset = new Vector3(0, 0, 0);  // 회전 오프셋
-    protected GameObject hit;  // 충돌 효과 오브젝트
-    protected GameObject flash;  // 발사 효과 오브젝트
+    //컴포넌트 영역
     private Rigidbody2D rb;  // 2D 리지드바디
     private CircleCollider2D cc;  // circle collider
+
+    //스텟 영역
+    public int attackPower = 1;
+    private float speed = 5f;  // 투사체 속도
+    protected int[] master_attackPower = { 1,2,3 };
+
+    // 이펙트 영역
+    protected GameObject hit;  // 충돌 효과 오브젝트
+    protected GameObject flash;  // 발사 효과 오브젝트
     public GameObject[] Detached;  // 분리된 오브젝트 배열
 
+    // 참조용 스트링 Arr
+    //protected string[] hitFrefabNames = { "Projectile/BasicHit", "Projectile/ADVBasicHit", "Projectile/ICEHit", "Projectile/FIREHit", "Projectile/Special2Hit" };
+    //protected string[] flashFrefabNames = { "Projectile/BasicFlash", "Projectile/ADVBasicFlash", "Projectile/ICEFlash", "Projectile/FIREFlash", "Projectile/Special2Flash" };
+    protected string[] hitFrefabNames = { "Projectile/BasicHit", "Projectile/ADVBasicHit", "Projectile/FIREHit" };
+    protected string[] flashFrefabNames = { "Projectile/BasicFlash", "Projectile/ADVBasicFlash", "Projectile/FIREFlash"};
+
+    //ETC
     Dictionary<string, int> dictionary = new Dictionary<string, int>();
+    protected enum Level { LV1, LV2, LV3}
 
-    protected string[] hitFrefabNames = { "Projectile/BasicHit", "Projectile/ADVBasicHit", "Projectile/ICEHit", "Projectile/FIREHit", "Projectile/Special2Hit" }; 
-    protected string[] flashFrefabNames = { "Projectile/BasicFlash", "Projectile/ADVBasicFlash", "Projectile/ICEFlash", "Projectile/FIREFlash", "Projectile/Special2Flash" }; 
-
+    //사용 보류
+    //public float hitOffset = 0f;  // 충돌 시 오프셋
+    //public bool UseFirePointRotation;  // 충돌 시 회전 적용 여부
+    //public Vector3 rotationOffset = new Vector3(0, 0, 0);  // 회전 오프셋
 
     protected virtual void Start()
     {

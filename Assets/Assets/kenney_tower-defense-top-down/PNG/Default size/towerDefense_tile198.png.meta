@@ -132,7 +132,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      towerDefense_tile198_0: -4286957535010692730
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

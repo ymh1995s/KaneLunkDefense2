@@ -5,6 +5,6 @@ public class LV4Monster : BaseMonster
     protected override void Start()
     {
         base.Start();
-        hp = 4;
+        hp = master_Hp[(int)Level.LV4];
     }
 }

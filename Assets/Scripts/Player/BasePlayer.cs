@@ -4,22 +4,23 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class BasePlayer : MonoBehaviour
+public class BasePlayer : MonoBehaviour, IDamageable
 {
     Rigidbody2D rigid;
     Vector2 input;
-    //TODO : 플레이어 이속 대폭 낮춰야함
+
+    //스텟 영역
     static public float moveSpeed = 5f;
     static public int maxHP = 10;
     static public int currentHP = 10;
 
     //무기 관리
     public GameObject[] weapon1;
-    public GameObject weaponPrefab; // Inspector에서 할당할 무기 프리팹
+    public GameObject weaponPrefab; 
     const int maxWeaponCount = 8;
-     GameObject LV1WeaponPrefab; // Instantiate로 생성한 프리팹을 참조
-     GameObject LV2WeaponPrefab; // Instantiate로 생성한 프리팹을 참조
-     GameObject LV3WeaponPrefab; // Instantiate로 생성한 프리팹을 참조
+    GameObject LV1WeaponPrefab; 
+    GameObject LV2WeaponPrefab; 
+    GameObject LV3WeaponPrefab; 
 
     //아이템 자석 효과
     float attractionRange = 0.8f;   // 아이템 자석 효과 범위 (플레이어 기준)
@@ -28,17 +29,17 @@ public class BasePlayer : MonoBehaviour
 
     //선언과 동시에 초기화
     public int playerLv = 0;
-    public int weaponIndex = 0;
-    public int towerIndex = 0;
-    public int playerIndex = 0;
-    public int w1_level = 0;
+    public int gatcha_weaponIndex = 0;
+    public int gatcha_towerIndex = 0;
+    public int gatcha_playerIndex = 0;
     public int maxExp = 1;
     public int curExp = 0;
     
     //하위 스크립트
     ItemCollector itemcollector;
 
-    string[] weaponName;
+    // 참조용 스트링 Arr
+    string[] weaponName = new string[3] { "유튜브쟁이", "치지직갈걸", "숲에남을걸" };
 
     void Start()
     {
@@ -48,8 +49,7 @@ public class BasePlayer : MonoBehaviour
         // 하위 스크립트 로드
         itemcollector = new ItemCollector();
 
-        weaponName = new string[3] { "유튜브쟁이", "치지직갈걸", "숲에남을걸" };
-
+        // 무기 프리펩 로드
         LV1WeaponPrefab = Resources.Load<GameObject>(weaponName[0]); // Instantiate로 생성한 프리팹을 참조
         LV2WeaponPrefab = Resources.Load<GameObject>(weaponName[1]); // Instantiate로 생성한 프리팹을 참조
         LV3WeaponPrefab = Resources.Load<GameObject>(weaponName[2]); // Instantiate로 생성한 프리팹을 참조
@@ -66,14 +66,11 @@ public class BasePlayer : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //아이템 획득
         if (collision.CompareTag("Item"))
         {
-            Destroy(collision.gameObject); // 총알 삭제
+            Destroy(collision.gameObject);
             CheckLevelUp();
         }
-
-        // TODO: 피격 등
     }
 
     void FixedUpdate()
@@ -103,7 +100,6 @@ public class BasePlayer : MonoBehaviour
         //TODO
     }
 
-
     void CheckLevelUp()
     {
         //디버그 : 먹으면 무조건 레밸업
@@ -130,7 +126,6 @@ public class BasePlayer : MonoBehaviour
 
                     weapon1[i] = weapon;
                     WeaponSort();
-                    print(i);
                     return;
                 }
             }
@@ -146,7 +141,6 @@ public class BasePlayer : MonoBehaviour
         int[] gatchaArr = new int[maxWeaponCount] {0,1,2,3,4,5,6,7};
         Gatcha.Shuffle(gatchaArr);
 
-        //TODO CASE로 변경
         for (int i = 0; i < gatchaArr.Length;i++)
         {
             int index = gatchaArr[i];
@@ -179,7 +173,6 @@ public class BasePlayer : MonoBehaviour
         WeaponSort();
     }
 
-    //버그 : WeaponUpgrade 시 기존 무기 사라짐
     //TODO 조건문 자제 어떻게 호출형으로 못바꾸나?
     void LevelUp()
     {
@@ -187,9 +180,11 @@ public class BasePlayer : MonoBehaviour
         try
         {
             int index = Gatcha.levelUpGatcha[playerLv++];
+
             if (index == 0)
             {
-                int _weaponIndex = Gatcha.weaponGatcha[weaponIndex++];
+                int _weaponIndex = Gatcha.weaponGatcha[gatcha_weaponIndex++];
+
                 if (_weaponIndex == 0)
                 {
                     try
@@ -198,7 +193,6 @@ public class BasePlayer : MonoBehaviour
                     }
                     catch (Exception ex)
                     {
-                        print("EXCEPTION");
                         print(ex.ToString());
                     }
                 }
@@ -207,11 +201,9 @@ public class BasePlayer : MonoBehaviour
                     try
                     {
                         WeaponUpgrade();
-                        // print("플에이어 무기 등급 업(TODO)");
                     }
                     catch (Exception ex)
                     {
-                        print("EXCEPTION");
                         print(ex.ToString());
                     }
                 }
@@ -234,12 +226,12 @@ public class BasePlayer : MonoBehaviour
             }
             else if (index == 1)
             {
-                int _towerIndex = Gatcha.towerGatcha[towerIndex++];
+                int _towerIndex = Gatcha.towerGatcha[gatcha_towerIndex++];
                 LevelUpHelper.TowerUpgrade(_towerIndex);
             }
             else if (index == 2)
             {
-                int _playerIndex = Gatcha.playerGatcha[playerIndex++];
+                int _playerIndex = Gatcha.playerGatcha[gatcha_playerIndex++];
                 LevelUpHelper.PlayerUpgrade(_playerIndex);
             }
             else
@@ -249,7 +241,6 @@ public class BasePlayer : MonoBehaviour
         }
         catch (Exception ex)
         {
-            print("EXCEPTION");
             print(ex.ToString());
         }
     }

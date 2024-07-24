@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Gatcha.GameStart();
@@ -17,4 +18,5 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale -= 0.5f;
     }
+
 }

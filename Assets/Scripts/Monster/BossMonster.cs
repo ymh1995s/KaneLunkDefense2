@@ -5,6 +5,6 @@ public class BossMonster : BaseMonster
     protected override void Start()
     {
         base.Start();
-        hp = 10;
+        hp = master_Hp[(int)Level.BOSS];
     }
 }
