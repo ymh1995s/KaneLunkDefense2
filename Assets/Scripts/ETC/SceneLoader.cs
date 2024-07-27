@@ -3,21 +3,29 @@ using UnityEngine;
 
 public class SceneLoader : MonoBehaviour
 {
-    // 메인 게임 씬으로 전환하는 메서드
-    public void LoadMainGameScene()
+    static public void SceneLoad_MainGame()
     {
         SceneManager.LoadScene("GameScene");
     }
 
-    // 앤딩 씬으로 전환하는 메서드
-    public void LoadEndScene()
+    static public void SceneLoad_OverScene()
     {
-        SceneManager.LoadScene("EndScene");
+        SceneManager.LoadScene("GameOverScene");
     }
 
-    // 시작 씬으로 전환하는 메서드 (필요한 경우)
-    public void LoadStartScene()
+    static public void SceneLoad_ClearScene()
+    {
+        SceneManager.LoadScene("GameClearScene");
+    }
+
+    static public void SceneLoad_StartScene()
     {
         SceneManager.LoadScene("StartScene");
     }
+
+    static public void GameExit()
+    {
+        Application.Quit();
+    }
+
 }

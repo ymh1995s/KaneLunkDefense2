@@ -21,7 +21,7 @@ public class BaseProjectile : MonoBehaviour
     //스텟 영역
     public int attackPower = 1;
     private float speed = 5f;  // 투사체 속도
-    protected int[] master_attackPower = { 1,2,3 };
+    protected int[] master_attackPower = { 10,15,18 };
 
     // 이펙트 영역
     protected GameObject hit;  // 충돌 효과 오브젝트
@@ -31,11 +31,12 @@ public class BaseProjectile : MonoBehaviour
     // 참조용 스트링 Arr
     //protected string[] hitFrefabNames = { "Projectile/BasicHit", "Projectile/ADVBasicHit", "Projectile/ICEHit", "Projectile/FIREHit", "Projectile/Special2Hit" };
     //protected string[] flashFrefabNames = { "Projectile/BasicFlash", "Projectile/ADVBasicFlash", "Projectile/ICEFlash", "Projectile/FIREFlash", "Projectile/Special2Flash" };
-    protected string[] hitFrefabNames = { "Projectile/BasicHit", "Projectile/ADVBasicHit", "Projectile/FIREHit" };
-    protected string[] flashFrefabNames = { "Projectile/BasicFlash", "Projectile/ADVBasicFlash", "Projectile/FIREFlash"};
+    protected string[] hitFrefabNames = { "Projectile/BasicHit", "Projectile/ADVBasicHit", "Projectile/FireHit" };
+    protected string[] flashFrefabNames = { "Projectile/BasicFlash", "Projectile/ADVBasicFlash", "Projectile/FireFlash" };
 
     //ETC
     Dictionary<string, int> dictionary = new Dictionary<string, int>();
+    const int destorywait = 2;
     protected enum Level { LV1, LV2, LV3}
 
     //사용 보류
@@ -64,7 +65,7 @@ public class BaseProjectile : MonoBehaviour
                 Destroy(flashInstance, flashPsParts.main.duration);
             }
         }
-        Destroy(gameObject, 5);
+        Destroy(gameObject, destorywait);
     }
 
     public void Destroy()

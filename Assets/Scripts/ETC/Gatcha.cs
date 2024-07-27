@@ -11,7 +11,7 @@ public static class Gatcha
     {
         //50%
         // 궤도 무기 증가
-        // 궤도 무기 등급 업그레이드 
+        // 궤도 무기 등급 업그레이드 - 삭제
         // 궤도 무기 공속 증가
         // 궤도 무기 레인지 증가
         // 궤도 무기 공격력 증가
@@ -19,12 +19,12 @@ public static class Gatcha
         // 타워 체력
         // 타워 공속
         // 타워 레인지 
-        // 타워 공격력
+        // 타워 공격력 - 궤도오 ㅏ합침
         //10%
         // 플레이어 체력
         // 플레이어 이동속도
 
-        //TODO :아님 글로벌 상점, 투사체 등
+        //TODO :글로벌 상점, 새로운 투사체 등
 
         // 배열에 0을 50개, 1을,40개, 2를 10 개 추가
         AddNumbersToArray(0, 50, levelUpGatcha); //무기 관련
@@ -32,17 +32,15 @@ public static class Gatcha
         AddNumbersToArray(2, 10, levelUpGatcha); //플레이어 관련
 
         //합이 1000이 되도록
-        AddNumbersToArray(0, 170, weaponGatcha); // 무기 개수 MAX7 (기본 1개이므로)
-        AddNumbersToArray(1, 140, weaponGatcha); // 무기 등급 3*8 = 24
-        AddNumbersToArray(2, 290, weaponGatcha); // 무기 공속 
-        AddNumbersToArray(3, 100, weaponGatcha); // 무기 레인지
-        AddNumbersToArray(4, 300, weaponGatcha); // 무기 공격력
+        AddNumbersToArray(0, 100, weaponGatcha); // 무기 개수
+        AddNumbersToArray(1, 300, weaponGatcha); // 무기 공속 
+        AddNumbersToArray(2, 300, weaponGatcha); // 무기 레인지
+        AddNumbersToArray(3, 300, weaponGatcha); // 무기 공격력
 
         //합이 1000이 되도록
-        AddNumbersToArray(0, 300, towerGatcha); // 타워 체력
-        AddNumbersToArray(1, 300, towerGatcha); // 타워 공속
-        AddNumbersToArray(2, 100, towerGatcha); // 타워 레인지
-        AddNumbersToArray(3, 300, towerGatcha); // 타워 공격력
+        AddNumbersToArray(0, 333, towerGatcha); // 타워 체력
+        AddNumbersToArray(1, 333, towerGatcha); // 타워 공속
+        AddNumbersToArray(2, 334, towerGatcha); // 타워 레인지
 
         //합이 1000이 되도록
         AddNumbersToArray(0, 500, playerGatcha); // 플레이어 체력

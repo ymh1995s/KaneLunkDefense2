@@ -47,16 +47,16 @@ public class AudioiManager : MonoBehaviour
         switch (scene.name)
         {
             case "StartScene":
-                PlayBGM(0);
+                //PlayBGM(0); //동영상 대체
                 break;
             case "GameScene":
                 PlayBGM(1);
                 break;
-            case "EndScene":
-                PlayBGM(2);
+            case "GameOverScene":
+                break;
+            case "GameClearScene":
                 break;
             default:
-                PlayBGM(0);
                 break;
         }
     }
@@ -64,23 +64,23 @@ public class AudioiManager : MonoBehaviour
     void LoadAudioClips()
     {
         Audio_BGM[0] = Resources.Load<AudioClip>("Sounds/BGM/뭉탱이서바이벌");
-        Audio_BGM[1] = Resources.Load<AudioClip>("Sounds/BGM/spin");
-        Audio_BGM[2] = Resources.Load<AudioClip>("Sounds/BGM/spin"); //일단 여기까진 사용 안함
+        Audio_BGM[1] = Resources.Load<AudioClip>("Sounds/BGM/뭉탱이서바이벌");
+        Audio_BGM[2] = Resources.Load<AudioClip>("Sounds/BGM/뭉탱이서바이벌"); //일단 여기까진 사용 안함
     }
 
     void PlayBGM(int index)
     {
-        //if (index >= 0 && index < Audio_BGM.Length && Audio_BGM[index] != null)
-        //{
-        //    audioSource.clip = Audio_BGM[index];
-        //    audioSource.loop = true;
-        //    audioSource.volume = bgmVolume; // 볼륨 설정
-        //    audioSource.Play();
-        //}
-        //else
-        //{
-        //    Debug.LogError("Invalid BGM index or AudioClip not loaded.");
-        //}
+        if (index >= 0 && index < Audio_BGM.Length && Audio_BGM[index] != null)
+        {
+            audioSource.clip = Audio_BGM[index];
+            audioSource.loop = true;
+            audioSource.volume = bgmVolume; // 볼륨 설정
+            audioSource.Play();
+        }
+        else
+        {
+            Debug.LogError("Invalid BGM index or AudioClip not loaded.");
+        }
     }
 
     public void SetBGMVolume(float volume)

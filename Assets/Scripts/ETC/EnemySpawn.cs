@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawn : MonoBehaviour
@@ -7,7 +8,8 @@ public class EnemySpawn : MonoBehaviour
     private float spawnInterval = 1; // 생성 간격(초)
     private float changeInterval = 3f; // 프리팹 변경 간격(초) 2분씩 5개해서 일단 10개
     private int currentPrefabIndex = 0;
-    private string[] prefabNames = { "Monster/LV1", "Monster/LV2", "Monster/LV3", "Monster/LV4", "Monster/LV5" };
+    private string[] prefabNames = { "Monster/LV1", "Monster/LV2", "Monster/LV3", "Monster/LV4", "Monster/LV5"};
+
 
     void Start()
     {
@@ -21,11 +23,14 @@ public class EnemySpawn : MonoBehaviour
         while (true)
         {
             // TODO 오브젝트 풀링
-            Instantiate(objectToSpawn, transform.position, transform.rotation);
+            GameObject bossObject = Instantiate(objectToSpawn, transform.position, transform.rotation);
+            //Instantiate(objectToSpawn, transform.position, transform.rotation);
+            //Instantiate(objectToSpawn, transform.position, transform.rotation);
+            //Instantiate(objectToSpawn, transform.position, transform.rotation);
+
             yield return new WaitForSeconds(spawnInterval);
         }
     }
-
     private IEnumerator ChangePrefabPeriodically()
     {
         while (true)

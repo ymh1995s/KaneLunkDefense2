@@ -14,7 +14,8 @@ public class BaseMonster : MonoBehaviour
     private Coroutine attackCoroutine;
 
     //탐지 영역
-    GameObject target; // 목표 지점
+    protected GameObject target; // 목표 지점
+    protected GameObject commandCenter; //디폴트 목표
     private float DetectRange = 5; // 목표를 탐지하기 위한 범위
     private LayerMask[] targetLayer;    // 적 레이어
 
@@ -24,7 +25,8 @@ public class BaseMonster : MonoBehaviour
     public int attackPower = 1;
     private float attackInterval = 1.0f;
     private float lastAttackTime = 0.0f;
-    protected int[] master_Hp = new int[6] { 1,2,3,4,5,10 };
+    //protected int[] master_Hp = new int[6] { 20, 100, 500, 2000, 10000, 5000000 };
+    protected int[] master_Hp = new int[6] { 20, 10, 50, 20, 10, 50 };
 
     //오디오 영역
     public AudioClip[] deathSound = new AudioClip[5]; // 사망 사운드 종류
@@ -39,6 +41,8 @@ public class BaseMonster : MonoBehaviour
 
     protected virtual void Start()
     {
+        commandCenter = GameObject.Find("tempCommandCenter");
+
         SetAudio();
         SetSearch();
     }
@@ -72,7 +76,7 @@ public class BaseMonster : MonoBehaviour
         targetLayer = new LayerMask[3];
         targetLayer[0] = LayerMask.GetMask("Player");
         targetLayer[1] = LayerMask.GetMask("Tower");
-        targetLayer[2] = LayerMask.GetMask("CommanCenter"); //실제 사용하진 않음
+        targetLayer[2] = LayerMask.GetMask("CommanCenter");
     }
 
     void LoadAudioClips()
@@ -83,7 +87,7 @@ public class BaseMonster : MonoBehaviour
         }
     }
 
-    void ChooseTarget()
+    protected virtual void ChooseTarget()
     {
         // 플레이어 > 타워 > 기지 순 어그로
         Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, DetectRange, targetLayer[0]);
@@ -99,12 +103,13 @@ public class BaseMonster : MonoBehaviour
             target = targets[0].gameObject;
             return;
         }
-        target = GameObject.Find("tempCC");
+
+        target = commandCenter;
     }
 
     void Move()
     {
-        if (target != null)
+        if (target != null && rigid!=null)
         {
             Vector2 goal = new Vector2(target.transform.position.x, target.transform.position.y);
             Vector2 direction = (goal - (Vector2)transform.position).normalized;
@@ -113,7 +118,7 @@ public class BaseMonster : MonoBehaviour
     }
 
 
-    void TakeDamage(int damage)
+    protected virtual void TakeDamage(int damage)
     {
         hp -= damage;
         //healthBar.SetHealth(currentHealth); //TODO?
@@ -127,12 +132,19 @@ public class BaseMonster : MonoBehaviour
         PlayDeathSound();
 
         isDying = true;
+
         // 소리가 재생되는 동안 콜라이더와 태그 제거
         if (monsterCollider != null)
         {
             Destroy(monsterCollider); // 콜라이더 제거
         }
+
         gameObject.tag = "Untagged"; // 태그 제거
+
+        if(rigid!=null)
+        {            
+           Destroy(rigid);
+        }
 
         if (monsterRenderer != null)
         {
@@ -180,9 +192,9 @@ public class BaseMonster : MonoBehaviour
         string coin;
 
         //TODO? 하드코딩 제거?
-        if (index < 3) coin = "tempCoin";
-        else if (index < 15) coin = "tempCoin2";
-        else coin = "tempCoin3";
+        if (index < 3) coin = "Coin/Coin";
+        else if (index < 15) coin = "Coin/Coin2";
+        else coin = "Coin/Coin3";
 
         // Resources 폴더에서 아이템 프리팹을 로드
         GameObject itemPrefab = Resources.Load<GameObject>(coin);
@@ -211,7 +223,7 @@ public class BaseMonster : MonoBehaviour
                 projectile.Destroy();
             }
         }
-        else if (collision.CompareTag("Player") || collision.CompareTag("Tower"))
+        else if (collision.CompareTag("Player") || collision.CompareTag("Tower") || collision.CompareTag("CommandCenter"))
         {
             IDamageable damageable = collision.GetComponent<IDamageable>();
             if (damageable != null)
@@ -223,16 +235,6 @@ public class BaseMonster : MonoBehaviour
                 attackCoroutine = StartCoroutine(Attack(damageable));
             }
         }
-
-        //if (collision.CompareTag("Player"))
-        //{
-        //    StartCoroutine(AttackPlayer(collision.GetComponent<BasePlayer>()));
-        //}
-
-        //if (collision.CompareTag("Tower"))
-        //{
-        //    StartCoroutine(AttackTower(collision.GetComponent<BaseTower>()));
-        //}
     }
 
     void OnTriggerExit2D(Collider2D collision)
@@ -245,15 +247,6 @@ public class BaseMonster : MonoBehaviour
                 attackCoroutine = null;
             }
         }
-        //if (collision.CompareTag("Player"))
-        //{
-        //    StopCoroutine(AttackPlayer(collision.GetComponent<BasePlayer>()));
-        //}
-
-        //if (collision.CompareTag("Tower"))
-        //{
-        //    StopCoroutine(AttackTower(collision.GetComponent<BaseTower>()));
-        //}
     }
 
     private IEnumerator Attack(IDamageable target)
@@ -268,32 +261,6 @@ public class BaseMonster : MonoBehaviour
             yield return null;
         }
     }
-
-    //IEnumerator AttackPlayer(BasePlayer player)
-    //{
-    //    while (player != null)
-    //    {
-    //        if (Time.time - lastAttackTime >= attackInterval)
-    //        {
-    //            player.TakeDamage(attackPower);
-    //            lastAttackTime = Time.time;
-    //        }
-    //        yield return null;
-    //    }
-    //}
-
-    //IEnumerator AttackTower(BaseTower tower)
-    //{
-    //    while (tower != null)
-    //    {
-    //        if (Time.time - lastAttackTime >= attackInterval)
-    //        {
-    //            tower.TakeDamage(attackPower);
-    //            lastAttackTime = Time.time;
-    //        }
-    //        yield return null;
-    //    }
-    //}
 
     private void OnDrawGizmos()
     {

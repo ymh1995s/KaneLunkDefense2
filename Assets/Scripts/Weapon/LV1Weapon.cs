@@ -4,7 +4,8 @@ public class LV1Weapon : BaseWeapon
 {
     protected override void Start()
     {
-        base.Start(); 
+        base.Start();
+        detectionRadius = 3;  // 타워의 탐지 반경
         bulletPrefab = Resources.Load<GameObject>(prefabNames[(int)Level.LV1]);
     }
 

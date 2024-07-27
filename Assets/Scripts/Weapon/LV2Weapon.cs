@@ -4,8 +4,9 @@ public class LV2Weapon : BaseWeapon
 {    
     protected override void Start()
     {
-        base.Start(); // Call BaseWeapon's Start method
-        bulletPrefab = Resources.Load<GameObject>(prefabNames[(int)Level.LV1]);
+        base.Start();
+        detectionRadius = 4;  // 타워의 탐지 반경
+        bulletPrefab = Resources.Load<GameObject>(prefabNames[(int)Level.LV2]);
     }
 
     // Update is called once per frame

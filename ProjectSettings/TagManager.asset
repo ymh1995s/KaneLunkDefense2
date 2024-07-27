@@ -10,6 +10,7 @@ TagManager:
   - LV3Weapon
   - LV1Weapon
   - Tower
+  - CommandCenter
   layers:
   - Default
   - TransparentFX

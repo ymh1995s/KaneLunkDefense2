@@ -4,9 +4,8 @@ using UnityEngine.UIElements;
 public class BaseTower : MonoBehaviour, IDamageable
 {
     //½ºÅÝ ¿µ¿ª
-    static public int maxHP = 10;
+    static public int maxHP = 100;
     [SerializeField] private int currentHp;
-    public static int attackPower;
     [SerializeField] private int attackRange;
     [SerializeField] private int attackCoolTime;
     private GameObject bulletPrefab; // ¹ß»çÇÒ ÃÑ¾Ë ÇÁ¸®ÆÕ

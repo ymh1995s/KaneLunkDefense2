@@ -28,7 +28,6 @@ public static class LevelUpHelper
         if (index == 0)  TowerHPUp();
         else if (index == 1) TowerAttackSpeedUp();
         else if (index == 2) TowerRangeUp(); 
-        else if (index == 3) TowerAttackPowerUp();
         else Debug.Log("Å¸¿ö ·¹¹ë¾÷ ERROR");
     }
 
@@ -40,11 +39,6 @@ public static class LevelUpHelper
     static public void TowerAttackSpeedUp()
     {
         BaseTower.fireRateMmul *= 0.9f;
-    }
-
-    static public void TowerAttackPowerUp()
-    {
-        BaseTower.attackPower += 2;
     }
 
     static public void TowerRangeUp()
