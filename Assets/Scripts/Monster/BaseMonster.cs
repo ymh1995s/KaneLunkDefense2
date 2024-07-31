@@ -33,7 +33,7 @@ public class BaseMonster : MonoBehaviour
     private Transform playerTransform; // 플레이어 거리 비례 사운드 조절
     private AudioSource audioSource; // 컴포넌트
     private Renderer monsterRenderer; // 사망 후 사운드 재생 처리를 위한 몬스터의 렌더러
-    private Collider monsterCollider; // 사망 후 사운드 재생 처리를 위한 몬스터의 콜라이더
+    CapsuleCollider2D monsterCollider;
 
     // 참조용 스트링 Arr
     string[] deathSoundName = new string[5] { "Sounds/SFX/아이고난1", "Sounds/SFX/아이고난2", "Sounds/SFX/아이고난3", "Sounds/SFX/아이고난4", "Sounds/SFX/아이고난5", };
@@ -62,7 +62,7 @@ public class BaseMonster : MonoBehaviour
         playerTransform = GameObject.FindWithTag("Player").transform;
         audioSource = gameObject.AddComponent<AudioSource>();
         monsterRenderer = GetComponent<Renderer>();
-        monsterCollider = GetComponent<Collider>();
+        monsterCollider = GetComponent<CapsuleCollider2D>();
         audioSource.spatialBlend = 1.0f; // 3D 사운드 설정
         audioSource.minDistance = 1.0f; // n일 때 소리 최소, 그 이하 소리 없음
         audioSource.maxDistance = 5.0f; // n일 때 소리 최대, 그 이상 소리 최대
@@ -129,7 +129,7 @@ public class BaseMonster : MonoBehaviour
     IEnumerator DeathRoutine()
     {
         DropItem();
-        PlayDeathSound();
+        //PlayDeathSound();
 
         isDying = true;
 

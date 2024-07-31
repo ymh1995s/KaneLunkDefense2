@@ -8,7 +8,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     private float startTime; // 씬이 시작된 시간
 
+    public HUDManager hudManager;
     public BasePlayer player;
+
     void Awake()
     {
         if (Instance == null)
@@ -29,6 +31,15 @@ public class GameManager : MonoBehaviour
     {
         startTime = Time.time; // 씬 시작 시점을 기록
         Gatcha.GameStart();
+
+        // HUDManager를 동적으로 찾음
+        hudManager = FindObjectOfType<HUDManager>();
+
+        if (hudManager == null)
+        {
+            Debug.LogError("HUDManager를 찾을 수 없습니다.");
+            return;
+        }
     }
 
     void Update()

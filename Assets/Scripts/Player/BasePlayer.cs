@@ -13,8 +13,8 @@ public class BasePlayer : MonoBehaviour, IDamageable
 
     //스텟 영역
     static public float moveSpeed = 5f;
-    static public int maxHP = 10;
-    static public int currentHP = 10;
+    static public int maxHP = 20;
+    static public int currentHP;
 
     //무기 관리
     const int maxWeaponCount = 100;
@@ -49,6 +49,8 @@ public class BasePlayer : MonoBehaviour, IDamageable
         itemLayer = LayerMask.GetMask("Item");
         spriteRenderer = GetComponent<SpriteRenderer>();
 
+        currentHP = maxHP;
+
         // 하위 스크립트 로드
         itemcollector = new ItemCollector();
 
@@ -60,11 +62,17 @@ public class BasePlayer : MonoBehaviour, IDamageable
         // 무기 1개 기본 제공
         weapon1 = new GameObject[maxWeaponCount];
         WeaponAdd();
+
     }
 
     private void Update()
     {
         itemcollector.CollectItem(transform.position, attractionRange, attractionSpeed, itemLayer);
+
+        // HUD 업데이트
+        GameManager.Instance.hudManager.PlayerHUDUpdate(playerLv, curExp, maxExp, currentHP, moveSpeed);
+        GameManager.Instance.hudManager.WeaponHUDUpdate(BaseProjectile.attackPowerUp, BaseWeapon.detectionRadiusMul, BaseWeapon.fireRateMmul);
+        GameManager.Instance.hudManager.TowerHUDUpdate(BaseProjectile.attackPowerUp, BaseTower.detectionRadius, BaseTower.fireRateMmul);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -108,7 +116,6 @@ public class BasePlayer : MonoBehaviour, IDamageable
         }
     }
 
-
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
@@ -133,11 +140,11 @@ public class BasePlayer : MonoBehaviour, IDamageable
 
     void CheckLevelUp()
     {
-        if (curExp < maxExp) return;
+        //if (curExp < maxExp) return;
 
         //Level up
         curExp = System.Math.Max(0, maxExp - curExp);
-        maxExp += 5; //본게임 때 주석 해제
+        maxExp += 1; //본게임 때 주석 해제
         LevelUp();
     }
 
@@ -155,8 +162,8 @@ public class BasePlayer : MonoBehaviour, IDamageable
                     int index = UnityEngine.Random.Range(0, 100);
 
                     //TODO? 하드코딩 제거?
-                    if (index < 0) weapon = Instantiate(LV1WeaponPrefab, transform.position, Quaternion.identity);
-                    else if (index < 1) weapon = Instantiate(LV2WeaponPrefab, transform.position, Quaternion.identity);
+                    if (index <33) weapon = Instantiate(LV1WeaponPrefab, transform.position, Quaternion.identity);
+                    else if (index < 66) weapon = Instantiate(LV2WeaponPrefab, transform.position, Quaternion.identity);
                     else weapon = Instantiate(LV3WeaponPrefab, transform.position, Quaternion.identity);
 
                     weapon.transform.parent = transform; // 현재 플레이어를 부모로 설정
@@ -185,26 +192,11 @@ public class BasePlayer : MonoBehaviour, IDamageable
             {
                 int _weaponIndex = Gatcha.weaponGatcha[gatcha_weaponIndex++];
 
-                if (_weaponIndex == 0)
-                {
-                     WeaponAdd();
-                }
-                else if (_weaponIndex == 1)
-                {
-                    LevelUpHelper.WeaponAttackSpeedUp();
-                }
-                else if (_weaponIndex == 2)
-                {
-                    LevelUpHelper.WeaponRangedUp();
-                }
-                else if (_weaponIndex == 3)
-                {
-                    LevelUpHelper.WeaponAttackPowerUp();
-                }
-                else
-                {
-                    print("플에이어 무기 업그레이드 실패");
-                }
+                if (_weaponIndex == 0) WeaponAdd(); 
+                else if (_weaponIndex == 1)  LevelUpHelper.WeaponAttackSpeedUp(); 
+                else if (_weaponIndex == 2)  LevelUpHelper.WeaponRangedUp(); 
+                else if (_weaponIndex == 3) LevelUpHelper.WeaponAttackPowerUp(); 
+                else  print("플에이어 무기 업그레이드 실패");
             }
             else if (index == 1)
             {
@@ -228,16 +220,13 @@ public class BasePlayer : MonoBehaviour, IDamageable
     }
 
     // 궤도 무기를 일정한 간격에서 공전하게함
-    // TODO : FInd 등으로 int 매개변수 없앰 ==> WeaponSrt()로 호출
     void WeaponSort()
     {
-        //TODO : 업그레이드 시 아직 업그레이드 된 오브젝트가 살아있어서 코루틴으로 빼야함
         GameObject[] weapons1 = GameObject.FindGameObjectsWithTag("LV1Weapon");
         GameObject[] weapons2 = GameObject.FindGameObjectsWithTag("LV2Weapon");
         GameObject[] weapons3 = GameObject.FindGameObjectsWithTag("LV3Weapon");
 
         int weaponCount = weapons1.Length + weapons2.Length + weapons3.Length;
-        //Debug.Log("Number of weapons: " + weaponCount);
 
         try
         {

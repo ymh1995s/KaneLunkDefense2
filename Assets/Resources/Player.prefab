@@ -126,6 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e645020a3febb4f85777637de0418b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minBounds: {x: 0, y: 0}
+  maxBounds: {x: 0, y: 0}
   weapon1: []
   weaponPrefab: {fileID: 0}
   playerLv: 0
@@ -191,7 +193,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

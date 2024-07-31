@@ -9,12 +9,12 @@ public static class LevelUpHelper
 
     static public void WeaponAttackPowerUp()
     {
-        //BaseProjectile.attackPower += 2;
+        BaseProjectile.attackPowerUp += 2;
     }
 
     static public void WeaponAttackSpeedUp()
     {
-        BaseWeapon.fireRateMmul *= 0.95f;
+        BaseWeapon.fireRateMmul *= 0.98f;
     }
 
     static public void WeaponRangedUp()
@@ -25,20 +25,21 @@ public static class LevelUpHelper
     //이것도 분기좀 빼면 안되나
     static public void TowerUpgrade(int index)
     {
-        if (index == 0)  TowerHPUp();
+        if (index == 0)  TowerHPRecovery();
         else if (index == 1) TowerAttackSpeedUp();
         else if (index == 2) TowerRangeUp(); 
         else Debug.Log("타워 레밸업 ERROR");
     }
 
-    static public void TowerHPUp()
+    static public void TowerHPRecovery()
     {
-        BaseTower.maxHP += 20;
+        //TODO :  모든 타워를 찾아서 혹은 관리하게 해서
+        // HP RECover
     }
 
     static public void TowerAttackSpeedUp()
     {
-        BaseTower.fireRateMmul *= 0.9f;
+        BaseTower.fireRateMmul *= 0.95f;
     }
 
     static public void TowerRangeUp()
@@ -61,7 +62,6 @@ public static class LevelUpHelper
 
     static public void PlayerSpeedUp()
     {
-        //BasePlayer.moveSpeed += 0.1f;
-        BasePlayer.moveSpeed += 1f;
+        BasePlayer.moveSpeed += 0.2f;
     }
 }

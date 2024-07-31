@@ -70,17 +70,17 @@ public class AudioiManager : MonoBehaviour
 
     void PlayBGM(int index)
     {
-        if (index >= 0 && index < Audio_BGM.Length && Audio_BGM[index] != null)
-        {
-            audioSource.clip = Audio_BGM[index];
-            audioSource.loop = true;
-            audioSource.volume = bgmVolume; // º¼·ı ¼³Á¤
-            audioSource.Play();
-        }
-        else
-        {
-            Debug.LogError("Invalid BGM index or AudioClip not loaded.");
-        }
+        //if (index >= 0 && index < Audio_BGM.Length && Audio_BGM[index] != null)
+        //{
+        //    audioSource.clip = Audio_BGM[index];
+        //    audioSource.loop = true;
+        //    audioSource.volume = bgmVolume; // º¼·ı ¼³Á¤
+        //    audioSource.Play();
+        //}
+        //else
+        //{
+        //    Debug.LogError("Invalid BGM index or AudioClip not loaded.");
+        //}
     }
 
     public void SetBGMVolume(float volume)
