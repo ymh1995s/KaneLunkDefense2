@@ -9,59 +9,57 @@ public static class LevelUpHelper
 
     static public void WeaponAttackPowerUp()
     {
-        BaseProjectile.attackPowerUp += 2;
+        BaseProjectile.attackPowerUp += 5;
+        GameManager.Instance.hudManager.LevelUpHintUpdate("무기 공격력 증가!");
     }
 
     static public void WeaponAttackSpeedUp()
     {
-        BaseWeapon.fireRateMmul *= 0.98f;
+        BaseWeapon.fireRateMmul *= 0.95f;
+        GameManager.Instance.hudManager.LevelUpHintUpdate("무기 공격 속도 증가!");
     }
 
     static public void WeaponRangedUp()
     {
-        BaseWeapon.detectionRadiusMul += 0.1f;
+        BaseWeapon.detectionRadiusMul += 0.2f;
+        GameManager.Instance.hudManager.LevelUpHintUpdate("무기 사거리 증가!");
     }
 
     //이것도 분기좀 빼면 안되나
     static public void TowerUpgrade(int index)
     {
-        if (index == 0)  TowerHPRecovery();
-        else if (index == 1) TowerAttackSpeedUp();
-        else if (index == 2) TowerRangeUp(); 
-        else Debug.Log("타워 레밸업 ERROR");
-    }
-
-    static public void TowerHPRecovery()
-    {
-        //TODO :  모든 타워를 찾아서 혹은 관리하게 해서
-        // HP RECover
+        if (index == 0) TowerAttackSpeedUp();
+        else if (index == 1) TowerRangeUp();
     }
 
     static public void TowerAttackSpeedUp()
     {
-        BaseTower.fireRateMmul *= 0.95f;
+        BaseTower.fireRateMmul *= 0.9f;
+        GameManager.Instance.hudManager.LevelUpHintUpdate("타워 공격 속도 증가!");
     }
 
     static public void TowerRangeUp()
     {
-        BaseTower.detectionRadius += 0.15f;
+        BaseTower.detectionRadius += 0.2f;
+        GameManager.Instance.hudManager.LevelUpHintUpdate("타워 사거리 증가!");
     }
 
     static public void PlayerUpgrade(int index)
     {
         if (index == 0)  PlayerHPUp(); 
         else if (index == 1)  PlayerSpeedUp();
-        else Debug.Log("LEVELUP ERROR playerIndex");
     }
 
     static public void PlayerHPUp()
     {
         BasePlayer.maxHP += 1;
         BasePlayer.currentHP += BasePlayer.maxHP;
+        GameManager.Instance.hudManager.LevelUpHintUpdate("플레이어 체력 증가!");
     }
 
     static public void PlayerSpeedUp()
     {
-        BasePlayer.moveSpeed += 0.2f;
+        BasePlayer.moveSpeed += 0.1f;
+        GameManager.Instance.hudManager.LevelUpHintUpdate("플레이어 이동속도 증가!");
     }
 }

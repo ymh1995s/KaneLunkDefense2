@@ -12,7 +12,7 @@ public class BasePlayer : MonoBehaviour, IDamageable
     public Vector2 maxBounds; // 최대 경계
 
     //스텟 영역
-    static public float moveSpeed = 5f;
+    static public float moveSpeed = 1.5f;
     static public int maxHP = 20;
     static public int currentHP;
 
@@ -34,7 +34,7 @@ public class BasePlayer : MonoBehaviour, IDamageable
     public int gatcha_weaponIndex = 0;
     public int gatcha_towerIndex = 0;
     public int gatcha_playerIndex = 0;
-    public int maxExp = 1;
+    public int maxExp = 10;
     public int curExp = 0;
     
     //하위 스크립트
@@ -140,11 +140,11 @@ public class BasePlayer : MonoBehaviour, IDamageable
 
     void CheckLevelUp()
     {
-        //if (curExp < maxExp) return;
+        if (curExp < maxExp) return;
 
         //Level up
         curExp = System.Math.Max(0, maxExp - curExp);
-        maxExp += 1; //본게임 때 주석 해제
+        maxExp += 2; //본게임 때 주석 해제
         LevelUp();
     }
 
@@ -161,15 +161,16 @@ public class BasePlayer : MonoBehaviour, IDamageable
 
                     int index = UnityEngine.Random.Range(0, 100);
 
-                    //TODO? 하드코딩 제거?
-                    if (index <33) weapon = Instantiate(LV1WeaponPrefab, transform.position, Quaternion.identity);
-                    else if (index < 66) weapon = Instantiate(LV2WeaponPrefab, transform.position, Quaternion.identity);
+                    //TODO 하드코딩 제거
+                    if (index <70) weapon = Instantiate(LV1WeaponPrefab, transform.position, Quaternion.identity);
+                    else if (index < 97) weapon = Instantiate(LV2WeaponPrefab, transform.position, Quaternion.identity);
                     else weapon = Instantiate(LV3WeaponPrefab, transform.position, Quaternion.identity);
 
                     weapon.transform.parent = transform; // 현재 플레이어를 부모로 설정
 
                     weapon1[i] = weapon;
                     WeaponSort();
+                    GameManager.Instance.hudManager.LevelUpHintUpdate("무기 추가!");
                     return;
                 }
             }
@@ -196,7 +197,6 @@ public class BasePlayer : MonoBehaviour, IDamageable
                 else if (_weaponIndex == 1)  LevelUpHelper.WeaponAttackSpeedUp(); 
                 else if (_weaponIndex == 2)  LevelUpHelper.WeaponRangedUp(); 
                 else if (_weaponIndex == 3) LevelUpHelper.WeaponAttackPowerUp(); 
-                else  print("플에이어 무기 업그레이드 실패");
             }
             else if (index == 1)
             {

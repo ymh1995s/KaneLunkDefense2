@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI; // UI 컴포넌트를 사용하기 위해 추가
 using UnityEngine.UIElements;
@@ -9,11 +10,13 @@ public class HUDManager : MonoBehaviour
     private Text playerSpecText;
     private Text WeaponSpecText;
     private Text TowerSpecText;
+    private Text levelupHintText;
 
 
 
     // 참조용 스트링 Arr
-    protected string[] textNames = { "MENU/UI/StatGroup/LVText", "MENU/UI/StatGroup/PlayerSpec", "MENU/UI/StatGroup/WeaponSpec", "MENU/UI/StatGroup/TowerSpec" };
+    protected string[] specTextDir = { "MENU/UI/StatGroup/LVText", "MENU/UI/StatGroup/PlayerSpec", "MENU/UI/StatGroup/WeaponSpec", "MENU/UI/StatGroup/TowerSpec" };
+    protected string levelUpHintDir = "MENU/UI/LevelUPText";
 
 
     void Start()
@@ -21,18 +24,14 @@ public class HUDManager : MonoBehaviour
         TextObjectSet();
     }
 
-    void Update()
-    {
-        StatUpdate();
-    }
-
     void TextObjectSet()
     {
         // 재귀적 찾기 유틸리티 함수
-        lvText = FindChild<Text>(transform, textNames[0]);
-        playerSpecText = FindChild<Text>(transform, textNames[1]);
-        WeaponSpecText = FindChild<Text>(transform, textNames[2]);
-        TowerSpecText = FindChild<Text>(transform, textNames[3]);
+        lvText = FindChild<Text>(transform, specTextDir[0]);
+        playerSpecText = FindChild<Text>(transform, specTextDir[1]);
+        WeaponSpecText = FindChild<Text>(transform, specTextDir[2]);
+        TowerSpecText = FindChild<Text>(transform, specTextDir[3]);
+        levelupHintText = FindChild<Text>(transform, levelUpHintDir);
     }
 
     T FindChild<T>(Transform parent, string path) where T : Component
@@ -45,16 +44,6 @@ public class HUDManager : MonoBehaviour
         return null;
     }
 
-    //폐기 유예
-    private void StatUpdate()
-    {
-        //lvText.text = $"LV {GameManager.Instance.player.playerLv} EXP {GameManager.Instance.player.curExp}/{GameManager.Instance.player.maxExp}";
-        //playerSpecText.text = $"Player HP/MS : {BasePlayer.currentHP}/{BasePlayer.moveSpeed}";
-        //lv1WeaponSpecText.text = $"LV1Weapon AP/AR/AS : {LV1Projectile.attackPower_ForUI}//{GameManager.Instance.player.maxExp}";
-        //lv2WeaponSpecText.text = $"LV2Weapon AP/AR/AS : {LV2Projectile.attackPower_ForUI}//{GameManager.Instance.player.maxExp}";
-        //lv3WeaponSpecText.text = $"LV3Weapon AP/AR/AS : {LV3Projectile.attackPower_ForUI}//{GameManager.Instance.player.maxExp}";
-        //TowerSpecText.text = $"Tower HP/AP/AS/R : {GameManager.Instance.player.playerLv} EXP {GameManager.Instance.player.curExp}/{GameManager.Instance.player.maxExp}";
-    }
 
     public void PlayerHUDUpdate(int lv, int curExp, int maxExp, int currentHP, float moveSpeed)
     {
@@ -76,5 +65,41 @@ public class HUDManager : MonoBehaviour
         string formattedAttackSpeed = attackSpeed.ToString("F2");
 
         TowerSpecText.text = $"T! /AP/AR/AS : +{attackPower} / +{attackRange} / x{formattedAttackSpeed}";
+    }
+
+    public float fadeDuration = 2f; // 텍스트가 서서히 사라지는 시간
+    public float displayDuration = 2f; // 텍스트가 표시되는 시간
+
+    public void LevelUpHintUpdate(string msg)
+    {
+        // 텍스트를 빨간색과 볼드체로 설정
+        levelupHintText.text = $"{msg}";
+        // 초기 색상을 완전히 불투명하게 설정
+        levelupHintText.color = new Color(1f, 0f, 0f, 1f);
+
+        // 페이드 아웃 코루틴 시작
+        StartCoroutine(FadeOutText());
+    }
+
+    private IEnumerator FadeOutText()
+    {
+        // 텍스트 표시 후 대기
+        yield return new WaitForSeconds(displayDuration);
+
+        // 초기 색상을 가져온다
+        Color originalColor = levelupHintText.color;
+        float elapsedTime = 0f;
+
+        // 페이드 아웃 진행
+        while (elapsedTime < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+            levelupHintText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 최종적으로 완전히 투명하게 설정
+        levelupHintText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
     }
 }

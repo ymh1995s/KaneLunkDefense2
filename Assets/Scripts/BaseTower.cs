@@ -10,7 +10,7 @@ public class BaseTower : MonoBehaviour, IDamageable
     [SerializeField] private int attackCoolTime;
     private GameObject bulletPrefab; // 발사할 총알 프리팹
     private float bulletSpeed = 5f;  // 총알 속도
-    private float fireRate = 1f; // 발사 간격을 초 단위로 설정 (5초에 한 번 발사)
+    private float fireRate = 0.4f; // 발사 간격을 초 단위로 설정 (X초에 한 번 발사)
     public static float fireRateMmul = 1.0f;
     public static float detectionRadius = 5f;  // 타워의 탐지 반경
     private float fireCountdown = 0f;// 발사 간격을 체크하기 위한 카운트다운 변수

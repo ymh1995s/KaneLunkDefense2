@@ -15,7 +15,6 @@ public static class Gatcha
         // 궤도 무기 레인지 증가
         // 궤도 무기 공격력 증가
         //40%
-        // 타워 체력
         // 타워 공속
         // 타워 레인지 
         //10%
@@ -36,9 +35,8 @@ public static class Gatcha
         AddNumbersToArray(3, 300, weaponGatcha); // 무기 공격력
 
         //합이 1000이 되도록
-        AddNumbersToArray(0, 333, towerGatcha); // 타워 체력
-        AddNumbersToArray(1, 333, towerGatcha); // 타워 공속
-        AddNumbersToArray(2, 334, towerGatcha); // 타워 레인지
+        AddNumbersToArray(1, 500, towerGatcha); // 타워 공속
+        AddNumbersToArray(2, 500, towerGatcha); // 타워 레인지
 
         //합이 1000이 되도록
         AddNumbersToArray(0, 500, playerGatcha); // 플레이어 체력

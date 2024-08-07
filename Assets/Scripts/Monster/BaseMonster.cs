@@ -21,19 +21,18 @@ public class BaseMonster : MonoBehaviour
 
     //스텟 영역
     [SerializeField] protected int hp = 9999;
-    protected float speed = 2f;
+    protected float speed = 1f;
     public int attackPower = 1;
     private float attackInterval = 1.0f;
     private float lastAttackTime = 0.0f;
-    //protected int[] master_Hp = new int[6] { 20, 100, 500, 2000, 10000, 5000000 };
-    protected int[] master_Hp = new int[6] { 20, 10, 50, 20, 10, 50 };
+    protected int[] master_Hp = new int[6] { 10, 30, 60, 80, 100, 5000 };
 
     //오디오 영역
     public AudioClip[] deathSound = new AudioClip[5]; // 사망 사운드 종류
     private Transform playerTransform; // 플레이어 거리 비례 사운드 조절
     private AudioSource audioSource; // 컴포넌트
     private Renderer monsterRenderer; // 사망 후 사운드 재생 처리를 위한 몬스터의 렌더러
-    CapsuleCollider2D monsterCollider;
+    CircleCollider2D monsterCollider;
 
     // 참조용 스트링 Arr
     string[] deathSoundName = new string[5] { "Sounds/SFX/아이고난1", "Sounds/SFX/아이고난2", "Sounds/SFX/아이고난3", "Sounds/SFX/아이고난4", "Sounds/SFX/아이고난5", };
@@ -62,7 +61,7 @@ public class BaseMonster : MonoBehaviour
         playerTransform = GameObject.FindWithTag("Player").transform;
         audioSource = gameObject.AddComponent<AudioSource>();
         monsterRenderer = GetComponent<Renderer>();
-        monsterCollider = GetComponent<CapsuleCollider2D>();
+        monsterCollider = GetComponent<CircleCollider2D>();
         audioSource.spatialBlend = 1.0f; // 3D 사운드 설정
         audioSource.minDistance = 1.0f; // n일 때 소리 최소, 그 이하 소리 없음
         audioSource.maxDistance = 5.0f; // n일 때 소리 최대, 그 이상 소리 최대

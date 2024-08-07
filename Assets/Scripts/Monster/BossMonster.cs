@@ -6,6 +6,7 @@ public class BossMonster : BaseMonster
     {
         base.Start();
         hp = master_Hp[(int)Level.BOSS];
+        speed = 0.5f;
     }
 
     protected override void ChooseTarget()
