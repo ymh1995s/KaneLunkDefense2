@@ -20,12 +20,12 @@ public class BaseMonster : MonoBehaviour
     private LayerMask[] targetLayer;    // 적 레이어
 
     //스텟 영역
-    [SerializeField] protected int hp = 9999;
+    [SerializeField] protected int hp;
     protected float speed = 1f;
     public int attackPower = 1;
     private float attackInterval = 1.0f;
     private float lastAttackTime = 0.0f;
-    protected int[] master_Hp = new int[6] { 10, 30, 60, 80, 100, 5000 };
+    protected int[] master_Hp = new int[6] { 10, 80, 180, 350, 500, 10000 };
 
     //오디오 영역
     public AudioClip[] deathSound = new AudioClip[5]; // 사망 사운드 종류
@@ -40,13 +40,13 @@ public class BaseMonster : MonoBehaviour
 
     protected virtual void Start()
     {
-        commandCenter = GameObject.Find("tempCommandCenter");
+        commandCenter = GameObject.Find("CommandCenter");
 
         SetAudio();
         SetSearch();
     }
 
-    private void Update()
+    protected void Update()
     {
         ChooseTarget();
     }
@@ -112,7 +112,16 @@ public class BaseMonster : MonoBehaviour
         {
             Vector2 goal = new Vector2(target.transform.position.x, target.transform.position.y);
             Vector2 direction = (goal - (Vector2)transform.position).normalized;
-            rigid.velocity = direction * speed;
+
+            // 이동 오차 값
+            float randomOffsetX = Random.Range(-1f, 1f); // X축 오차
+            float randomOffsetY = Random.Range(-1f, 1f); // Y축 오차
+            Vector2 randomOffset = new Vector2(randomOffsetX, randomOffsetY);
+
+            // 이동에 오차 적용
+            Vector2 finalDirection = (direction + randomOffset).normalized;
+
+            rigid.velocity = finalDirection * speed;
         }
     }
 

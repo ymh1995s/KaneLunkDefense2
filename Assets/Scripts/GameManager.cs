@@ -24,11 +24,8 @@ public class GameManager : MonoBehaviour
         }
 
         FindPlayer();
-    }
 
 
-    void Start()
-    {
         startTime = Time.time; // 씬 시작 시점을 기록
         Gatcha.GameStart();
 
@@ -40,6 +37,12 @@ public class GameManager : MonoBehaviour
             Debug.LogError("HUDManager를 찾을 수 없습니다.");
             return;
         }
+    }
+
+
+
+    void Start()
+    {
     }
 
     void Update()
@@ -73,5 +76,45 @@ public class GameManager : MonoBehaviour
     void UpdateTimer()
     {
         float elapsedTime = Time.time - startTime; // 경과 시간 계산
+    }
+
+    public void DebugWeaponMaster()
+    {
+        player.Debug_WeaponAdd();
+    }
+
+    public void DebugWeaponAtaackPowerUp()
+    {
+        LevelUpHelper.WeaponAttackPowerUp();
+    }
+
+    public void DebugWeaponAtaackSpeedUp()
+    {
+        LevelUpHelper.WeaponAttackSpeedUp();
+    }
+
+    public void DebugWeaponRangeUp()
+    {
+        LevelUpHelper.WeaponRangedUp();
+    }
+
+    public void DebugTowerAtaackSpeedUp()
+    {
+        LevelUpHelper.TowerAttackSpeedUp();
+    }
+
+    public void DebugTowerRangeUp()
+    {
+        LevelUpHelper.TowerRangeUp();
+    }
+
+    public void DebugPlayerHPUp()
+    {
+        LevelUpHelper.PlayerHPUp();
+    }
+
+    public void DebugPlayerSpeedUp()
+    {
+        LevelUpHelper.PlayerSpeedUp();
     }
 }

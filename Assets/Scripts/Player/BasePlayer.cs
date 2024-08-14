@@ -12,7 +12,7 @@ public class BasePlayer : MonoBehaviour, IDamageable
     public Vector2 maxBounds; // 최대 경계
 
     //스텟 영역
-    static public float moveSpeed = 1.5f;
+    static public float moveSpeed = 2.0f;
     static public int maxHP = 20;
     static public int currentHP;
 
@@ -29,13 +29,17 @@ public class BasePlayer : MonoBehaviour, IDamageable
     float attractionSpeed = 2f;     // 아이템 끌려들어가는 속도
     LayerMask itemLayer;            // 아이템 레이어
 
+    //체력바 영역
+    private RectTransform healthBarForeground;
+    private Vector3 originalScale;
+
     //선언과 동시에 초기화
-    public int playerLv = 0;
-    public int gatcha_weaponIndex = 0;
-    public int gatcha_towerIndex = 0;
-    public int gatcha_playerIndex = 0;
-    public int maxExp = 10;
-    public int curExp = 0;
+    private int playerLv = 0;
+    private int gatcha_weaponIndex = 0;
+    private int gatcha_towerIndex = 0;
+    private int gatcha_playerIndex = 0;
+    private int maxExp = 10;
+    private int curExp = 0;
     
     //하위 스크립트
     ItemCollector itemcollector;
@@ -62,6 +66,11 @@ public class BasePlayer : MonoBehaviour, IDamageable
         // 무기 1개 기본 제공
         weapon1 = new GameObject[maxWeaponCount];
         WeaponAdd();
+
+        //체력바
+        healthBarForeground = transform.Find("HPBar/RED").GetComponent<RectTransform>();
+        originalScale = healthBarForeground.localScale;
+        UpdateHealthBar();
 
     }
 
@@ -124,7 +133,6 @@ public class BasePlayer : MonoBehaviour, IDamageable
         if (currentHP <= 0)
         {
             Death();
-            //TODO : DIE
         }
     }
 
@@ -135,7 +143,11 @@ public class BasePlayer : MonoBehaviour, IDamageable
 
     void UpdateHealthBar()
     {
-        //TODO
+        // 체력 비율 계산
+        float healthPercent = (float)currentHP / maxHP;
+
+        // 체력바의 스케일 조정
+        healthBarForeground.localScale = new Vector3(originalScale.x * healthPercent, originalScale.y, originalScale.z);
     }
 
     void CheckLevelUp()
@@ -144,8 +156,35 @@ public class BasePlayer : MonoBehaviour, IDamageable
 
         //Level up
         curExp = System.Math.Max(0, maxExp - curExp);
-        maxExp += 2; //본게임 때 주석 해제
+        maxExp += 1; //본게임 때 주석 해제
         LevelUp();
+    }
+
+    public void Debug_WeaponAdd()
+    {
+        if (LV1WeaponPrefab != null)
+        {
+            for (int i = 0; i < maxWeaponCount; i++)
+            {
+                if (weapon1[i] == null)
+                {
+                    GameObject weapon;
+
+                    weapon = Instantiate(LV3WeaponPrefab, transform.position, Quaternion.identity);
+
+                    weapon.transform.parent = transform; // 현재 플레이어를 부모로 설정
+
+                    weapon1[i] = weapon;
+                    WeaponSort();
+                    GameManager.Instance.hudManager.LevelUpHintUpdate("무기 추가!");
+                    return;
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("무기 추가 실패");
+        }
     }
 
     //TODO : 업그레이드 관련 다 Helper쪽으로 빼기
@@ -163,7 +202,7 @@ public class BasePlayer : MonoBehaviour, IDamageable
 
                     //TODO 하드코딩 제거
                     if (index <70) weapon = Instantiate(LV1WeaponPrefab, transform.position, Quaternion.identity);
-                    else if (index < 97) weapon = Instantiate(LV2WeaponPrefab, transform.position, Quaternion.identity);
+                    else if (index < 95) weapon = Instantiate(LV2WeaponPrefab, transform.position, Quaternion.identity);
                     else weapon = Instantiate(LV3WeaponPrefab, transform.position, Quaternion.identity);
 
                     weapon.transform.parent = transform; // 현재 플레이어를 부모로 설정
@@ -181,7 +220,6 @@ public class BasePlayer : MonoBehaviour, IDamageable
         }
     }
 
-    //TODO 조건문 자제 어떻게 호출형으로 못바꾸나?
     void LevelUp()
     {
         //디버그하려고 try 걸음
@@ -193,9 +231,9 @@ public class BasePlayer : MonoBehaviour, IDamageable
             {
                 int _weaponIndex = Gatcha.weaponGatcha[gatcha_weaponIndex++];
 
-                if (_weaponIndex == 0) WeaponAdd(); 
-                else if (_weaponIndex == 1)  LevelUpHelper.WeaponAttackSpeedUp(); 
-                else if (_weaponIndex == 2)  LevelUpHelper.WeaponRangedUp(); 
+                if (_weaponIndex == 0) WeaponAdd();
+                else if (_weaponIndex == 1) LevelUpHelper.WeaponAttackSpeedUp();
+                else if (_weaponIndex == 2) LevelUpHelper.WeaponRangedUp();
                 else if (_weaponIndex == 3) LevelUpHelper.WeaponAttackPowerUp(); 
             }
             else if (index == 1)
@@ -207,6 +245,7 @@ public class BasePlayer : MonoBehaviour, IDamageable
             {
                 int _playerIndex = Gatcha.playerGatcha[gatcha_playerIndex++];
                 LevelUpHelper.PlayerUpgrade(_playerIndex);
+                UpdateHealthBar(); //체력 업그레이드 시 업그레이드 된 체력 반영
             }
             else
             {

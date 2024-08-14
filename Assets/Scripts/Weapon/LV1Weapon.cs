@@ -5,7 +5,7 @@ public class LV1Weapon : BaseWeapon
     protected override void Start()
     {
         base.Start();
-        detectionRadius = 3;  // 타워의 탐지 반경
+        detectionRadius = detectionRadius_[(int)Level.LV1];  // 타워의 탐지 반경
         bulletPrefab = Resources.Load<GameObject>(prefabNames[(int)Level.LV1]);
     }
 
@@ -18,7 +18,7 @@ public class LV1Weapon : BaseWeapon
 
     protected override void Fire()
     {
-        fireRate = 1f; // 발사 간격을 초 단위로 설정 (X초에 한 번 발사)
+        fireRate = fireRates[(int)Level.LV1]; // 발사 간격을 초 단위로 설정 (X초에 한 번 발사)
         base.Fire();
     }
 }

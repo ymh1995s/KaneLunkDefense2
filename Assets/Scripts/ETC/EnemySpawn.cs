@@ -5,8 +5,9 @@ using UnityEngine;
 public class EnemySpawn : MonoBehaviour
 {
     private GameObject objectToSpawn;  // 생성할 오브젝트 프리팹
-    private float spawnInterval = 5f; // 생성 간격(초)
-    private float changeInterval = 60f; // 프리팹 변경 간격(초) 2분씩 5개해서 일단 10개
+    private float spawnInterval = 1f; // 생성 간격(초)
+    private float changeInterval = 120f; // 프리팹 변경 간격(초) 2분씩 5개
+    private float spawnInterval_changeInterval; // 생성 간격 변경 => changeInterval/3
     private int currentPrefabIndex = 0;
     private string[] prefabNames = { "Monster/LV1", "Monster/LV2", "Monster/LV3", "Monster/LV4", "Monster/LV5"};
 
@@ -14,7 +15,9 @@ public class EnemySpawn : MonoBehaviour
     void Start()
     {
         objectToSpawn = Resources.Load<GameObject>(prefabNames[currentPrefabIndex]);
+        spawnInterval_changeInterval = changeInterval / 3;
         StartCoroutine(SpawnObject());
+        StartCoroutine(ChangeSpawnInterval());
         StartCoroutine(ChangePrefabPeriodically());
     }
 
@@ -24,32 +27,51 @@ public class EnemySpawn : MonoBehaviour
         {
             // TODO 오브젝트 풀링
 
-            // X * Y 격자 형태로 오브젝트 생성
-            for (int x = 0; x < 2; x++)
-            {
-                for (int y = 0; y < 2; y++)
-                {
-                    // 각 오브젝트의 위치를 설정
-                    Vector3 position = new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z);
-                    Instantiate(objectToSpawn, position, transform.rotation);
-                }
-            }
+            // (윗쪽 스폰) 범위 내에서 랜덤한 위치를 설정
+            float randomX = Random.Range(1f, 30f);
+            float randomY = Random.Range(-6f, 7f);
 
+            // 오브젝트의 위치를 설정
+            Vector3 position = new Vector3(randomX, randomY, transform.position.z);
+            Instantiate(objectToSpawn, position, transform.rotation);
+
+            // 나중에 함수로 구분해서 코드로 줄여놓을까?
+            // 하드코딩도 줄일 수 있으면 최소화
+            // (아래쪽 스폰) 범위 내에서 랜덤한 위치를 설정
+            randomX = Random.Range(-16f, 30f);
+            randomY = Random.Range(-6f, -22f);
+
+            // 오브젝트의 위치를 설정
+            position = new Vector3(randomX, randomY, transform.position.z);
+            Instantiate(objectToSpawn, position, transform.rotation);
 
             yield return new WaitForSeconds(spawnInterval);
         }
     }
 
-    private IEnumerator ChangePrefabPeriodically()
+
+    private IEnumerator ChangeSpawnInterval()
+    {
+        while (true)
+        {
+            float[] multipliers = { 0.75f, 0.5f, 1f }; // 반복될 생성 간격 배열
+            int index = 0;
+
+            while (true)
+            {
+                yield return new WaitForSeconds(spawnInterval_changeInterval); // 20초 대기
+                spawnInterval = 1f * multipliers[index]; // 원래 spawnInterval(1f)에 배수를 곱함
+                index = (index + 1) % multipliers.Length; // 인덱스를 순환시킴
+            }
+        }
+    }
+
+        private IEnumerator ChangePrefabPeriodically()
     {
         while (true)
         {
             // changeInterval 초 동안 대기
             yield return new WaitForSeconds(changeInterval);
-
-            // 다음 스테이지는 5초씩 추가
-            changeInterval += 5;
-
             // 현재 프리팹 인덱스를 다음으로 변경
             currentPrefabIndex = (currentPrefabIndex + 1) % prefabNames.Length;
             // 새로운 프리팹 로드

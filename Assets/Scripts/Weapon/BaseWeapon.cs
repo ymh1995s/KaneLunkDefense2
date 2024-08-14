@@ -20,18 +20,19 @@ public abstract class BaseWeapon : MonoBehaviour
     public GameObject bulletPrefab; // 발사할 총알 프리팹
     protected float bulletSpeed = 15f;  // 총알 속도
     protected float fireCountdown = 0f;// 발사 간격을 체크하기 위한 카운트다운 변수
-    protected float fireRate = 9999f; // 발사 간격을 초 단위로 설정 (X초에 한 번 발사)
+    protected float fireRate; // 발사 간격을 초 단위로 설정 (X초에 한 번 발사)
+    protected float[] fireRates = { 1f, 0.6f, 0.4f }; 
     public static float fireRateMmul = 1.0f;
-    
+
     // 탐지 영역
-    protected float detectionRadius = 9999;  // 타워의 탐지 반경
-    public static float detectionRadiusMul = 1.0f;
+    protected float detectionRadius;  // 타워의 탐지 반경
+    protected float[] detectionRadius_ = { 4f, 5f, 6f };
+    public static float detectionRadiusMul = 1.0f; // 탐지 반경 업그레이드 (곱셈 연산)
     protected LayerMask enemyLayer;           // 적 레이어
     protected Collider2D enemyCollider;       // 적 콜라이더
     [SerializeField] protected Transform target;               // 타게팅된 적
 
     // 참조용 스트링 Arr
-    //protected string[] prefabNames = { "Projectile/Basic", "Projectile/ADVBasic", "Projectile/ICE", "Projectile/FIRE", "Projectile/Special2" }; // 사용할 프리팹 이름들
     protected string[] prefabNames = { "Projectile/Basic", "Projectile/ADVBasic", "Projectile/FIRE"}; // 사용할 프리팹 이름들
 
     // ETC

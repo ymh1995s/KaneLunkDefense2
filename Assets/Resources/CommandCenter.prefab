@@ -45,8 +45,9 @@ GameObject:
   - component: {fileID: 6070930431100840861}
   - component: {fileID: 2644202097434977074}
   - component: {fileID: 2115052988757163593}
+  - component: {fileID: 3139336858689848463}
   m_Layer: 8
-  m_Name: tempCommandCenter
+  m_Name: CommandCenter
   m_TagString: CommandCenter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +63,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -15.56, y: 8.01, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3152288830677373749}
@@ -130,7 +131,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248588144212853184}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -157,8 +158,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.44, y: 1.35}
+  m_Offset: {x: -0.03622071, y: 0}
+  m_Size: {x: 0.87081945, y: 1.44}
   m_Direction: 0
 --- !u!50 &2644202097434977074
 Rigidbody2D:
@@ -200,6 +201,76 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHp: 0
+--- !u!60 &3139336858689848463
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248588144212853184}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.44, y: 1.35}
+    newSize: {x: 1.44, y: 1.35}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.29, y: -0.015}
+      - {x: 0.57, y: 0.074999996}
+      - {x: 0.71, y: 0.265}
+      - {x: 0.71, y: 0.415}
+      - {x: 0.63, y: 0.515}
+      - {x: 0.42999998, y: 0.59499997}
+      - {x: 0.34, y: 0.625}
+      - {x: 0.14, y: 0.66499996}
+      - {x: 0.04, y: 0.675}
+      - {x: -0.25, y: 0.675}
+      - {x: -0.53, y: 0.59499997}
+      - {x: -0.69, y: 0.525}
+      - {x: -0.7, y: 0.465}
+      - {x: -0.7, y: 0.355}
+      - {x: -0.65, y: 0.305}
+      - {x: -0.29999998, y: 0.114999995}
+      - {x: -0.28, y: -0.095}
+      - {x: -0.35, y: -0.59499997}
+      - {x: -0.35, y: -0.675}
+      - {x: 0.06, y: -0.675}
+      - {x: 0.08, y: -0.615}
+      - {x: 0.11, y: -0.465}
+      - {x: 0.12, y: -0.114999995}
+  m_UseDelaunayMesh: 0
 --- !u!1 &6635552384477593335
 GameObject:
   m_ObjectHideFlags: 0

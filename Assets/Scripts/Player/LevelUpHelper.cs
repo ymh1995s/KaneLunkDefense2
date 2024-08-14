@@ -9,8 +9,8 @@ public static class LevelUpHelper
 
     static public void WeaponAttackPowerUp()
     {
-        BaseProjectile.attackPowerUp += 5;
-        GameManager.Instance.hudManager.LevelUpHintUpdate("무기 공격력 증가!");
+        BaseProjectile.attackPowerUp += 2;
+        GameManager.Instance.hudManager.LevelUpHintUpdate("공격력 증가!");
     }
 
     static public void WeaponAttackSpeedUp()
@@ -59,7 +59,7 @@ public static class LevelUpHelper
 
     static public void PlayerSpeedUp()
     {
-        BasePlayer.moveSpeed += 0.1f;
+        BasePlayer.moveSpeed += 0.2f;
         GameManager.Instance.hudManager.LevelUpHintUpdate("플레이어 이동속도 증가!");
     }
 }

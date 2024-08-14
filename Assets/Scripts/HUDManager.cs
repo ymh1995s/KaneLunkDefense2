@@ -15,13 +15,18 @@ public class HUDManager : MonoBehaviour
 
 
     // 참조용 스트링 Arr
-    protected string[] specTextDir = { "MENU/UI/StatGroup/LVText", "MENU/UI/StatGroup/PlayerSpec", "MENU/UI/StatGroup/WeaponSpec", "MENU/UI/StatGroup/TowerSpec" };
-    protected string levelUpHintDir = "MENU/UI/LevelUPText";
+    protected string[] specTextDir = { "EXP/LVText", "MENU/UI/StatGroup/PlayerSpec", "MENU/UI/StatGroup/WeaponSpec", "MENU/UI/StatGroup/TowerSpec" };
+    protected string levelUpHintDir = "LevelUPText";
+
+    private void Awake()
+    {
+
+        TextObjectSet();
+    }
 
 
     void Start()
     {
-        TextObjectSet();
     }
 
     void TextObjectSet()
@@ -44,11 +49,22 @@ public class HUDManager : MonoBehaviour
         return null;
     }
 
+    public RectTransform experienceBar; // 게이지바에 해당하는 RectTransform
+    public float maxWidth = 200f; // 게이지바의 최대 너비
+
+    public void UpdateExperienceBar(float currentExperience, float maxExperience)
+    {
+        float width = (currentExperience / maxExperience) * maxWidth;
+        experienceBar.sizeDelta = new Vector2(width, experienceBar.sizeDelta.y);
+    }
+
 
     public void PlayerHUDUpdate(int lv, int curExp, int maxExp, int currentHP, float moveSpeed)
-    {
+    { 
+        lv+=1; //배열 관리상 +1
         lvText.text = $"LV {lv} EXP {curExp}/{maxExp}";
-        playerSpecText.text = $"P HP / Speed : {currentHP}/{moveSpeed}";
+        playerSpecText.text = $"플레이어 체력 / 이동속도 : {currentHP}/{moveSpeed}";
+
     }
 
     public void WeaponHUDUpdate(int attackPower, float attackRange, float attackSpeed)
@@ -56,7 +72,7 @@ public class HUDManager : MonoBehaviour
         // attackRange를 소수점 두 자리까지 포맷팅
         string formattedAttackSpeed = attackSpeed.ToString("F2");
 
-        WeaponSpecText.text = $"W AP/AR/AS : +{attackPower} / +{attackRange} / x{formattedAttackSpeed}";
+        WeaponSpecText.text = $"무기 AP/AR/AS : +{attackPower} / +{attackRange} / x{formattedAttackSpeed}";
     }
 
     public void TowerHUDUpdate(int attackPower, float attackRange, float attackSpeed)
@@ -64,7 +80,7 @@ public class HUDManager : MonoBehaviour
         // attackRange를 소수점 두 자리까지 포맷팅
         string formattedAttackSpeed = attackSpeed.ToString("F2");
 
-        TowerSpecText.text = $"T! /AP/AR/AS : +{attackPower} / +{attackRange} / x{formattedAttackSpeed}";
+        TowerSpecText.text = $"타워 /AP/AR/AS : +{attackPower} / +{attackRange} / x{formattedAttackSpeed}";
     }
 
     public float fadeDuration = 2f; // 텍스트가 서서히 사라지는 시간
