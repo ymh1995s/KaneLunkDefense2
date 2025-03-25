@@ -1,6 +1,6 @@
 # KaneLunkDefense2
 
-핵심 코드는 [[Scirpts 폴더]](https://github.com/ymh1995s/KaneLunkDefense2/tree/main/Assets/Scripts)에서 확인할 수 있습니다.
+핵심 코드는 [[Scripts 폴더]](https://github.com/ymh1995s/KaneLunkDefense2/tree/main/Assets/Scripts)에서 확인할 수 있습니다.
 
 데모 프로그램은 [[구글 드라이브]](https://drive.google.com/drive/folders/1lW7nh02HPi6yoJNUp1kX-Fd4eTa3luVN?usp=sharing)에서 확인할 수 있습니다.
 
